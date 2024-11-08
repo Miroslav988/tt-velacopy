@@ -104,10 +104,13 @@ $border-radius: 10px;
   color: $title-color;
   font-size: $title-font-size;
 }
+.itemList {
+  display: flex;
+  width: 100%;
+}
 .mainContainer {
   display: flex;
   gap: $gap;
-
   .sorter {
     margin-top: 10px;
     display: flex;
@@ -115,7 +118,6 @@ $border-radius: 10px;
     height: fit-content;
     border: 1px solid $border-color;
     border-radius: $border-radius;
-
     .filters {
       font-size: 16px;
       width: 304px;

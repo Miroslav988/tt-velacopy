@@ -187,7 +187,6 @@ $cart-size: 60px;
   flex-direction: column;
   margin-top: 10px;
   padding: 12px;
-  width: 304px;
   height: 390px;
 
   .itemImage {
