@@ -26,18 +26,20 @@
               flexDirection: 'column',
             }"
           >
-            <div class="sizeAndColorCont">
+            <div v-if="item.size || item.color" class="sizeAndColorCont">
               <span class="sizeCartCont">Размер: {{ item.size }}</span>
               <span class="colorCartCont">Цвет: {{ item.color }}</span>
             </div>
             <h3 class="cardName">{{ item.title }}</h3>
-            <button class="delete">
+            <button class="delete" @click="removeFromCart(item)">
               <div class="icon"></div>
               <span>Удалить</span>
             </button>
           </div>
           <div class="priseAndCountCont">
-            <p>{{ item.price * item.quantity }} ₽</p>
+            <p class="totalPrice">
+              {{ (item.price * item.quantity).toFixed(2) }} ₽
+            </p>
             <div class="biggerBtns">
               <button class="minus" @click="decreaseCount(item)">-</button
               ><span class="counter">{{ item.quantity }}</span
@@ -46,6 +48,8 @@
           </div>
         </div>
       </div>
+      <p class="totalCartPrice">Итого: {{ totalPrice.toFixed(2) }} ₽</p>
+      <button class="pay">Перейти к оформлению</button>
     </div>
   </div>
 </template>
@@ -55,6 +59,18 @@ import MyHeader from "@/components/MyHeader.vue";
 
 export default {
   methods: {
+    removeFromCart(item) {
+      const index = this.cartItems.findIndex(
+        (cartItem) =>
+          cartItem.name === item.name &&
+          cartItem.size === item.size &&
+          cartItem.color === item.color
+      );
+      if (index !== -1) {
+        this.cartItems.splice(index, 1);
+        console.log(`Товар ${item.name} удален из корзины.`);
+      }
+    },
     increaseCount(item) {
       item.quantity += 1;
     },
@@ -67,48 +83,124 @@ export default {
   components: {
     MyHeader,
   },
+  computed: {
+    totalPrice() {
+      return this.cartItems.reduce((total, item) => {
+        return total + item.price * item.quantity;
+      }, 0);
+    },
+  },
   data() {
     return {
-      cartItems: [], // Инициализируем массив для товаров в корзине
+      cartItems: [],
     };
   },
   created() {
-    const cartItemsString = this.$route.query.cartItems; // Получаем строку из параметров маршрута
+    const cartItemsString = this.$route.query.cartItems;
     if (cartItemsString) {
-      this.cartItems = JSON.parse(cartItemsString); // Парсим строку в массив объектов
-      console.log("Корзина:", this.cartItems); // Выводим данные в консоль для проверки
+      this.cartItems = JSON.parse(cartItemsString);
+      console.log("Корзина:", this.cartItems);
     } else {
-      console.log("Корзина пуста"); // Сообщение, если данных нет
+      console.log("Корзина пуста");
     }
   },
 };
 </script>
-<style>
+<style lang="scss">
+$border-color: #5e5e5e;
+$padding: 15px;
+$font-color: #5e5e5e;
+$font-weight-bold: 900;
+
 .cartItem {
-  border: 1px solid #5e5e5e;
+  border: 1px solid $border-color;
   display: flex;
-  padding: 15px 36px 24px 18px;
-  margin-left: 82px;
-  margin-right: 82px;
+  padding: $padding 36px 24px 18px;
+
+  .sizeAndColorCont {
+    display: flex;
+    gap: 14px;
+    color: $font-color;
+  }
+
+  .cartItemImage {
+    width: 223px;
+    height: 161px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+  }
+
+  .delete {
+    margin-top: auto;
+    background-color: transparent;
+    border: none;
+    display: flex;
+    gap: 12px;
+    color: $font-color;
+  }
+
+  .priseAndCountCont {
+    margin-top: auto;
+  }
+
+  .biggerBtns {
+    border: 1px solid $border-color;
+    width: 208px;
+    height: 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .minus,
+    .plus {
+      background-color: transparent;
+      border: none;
+      padding: 0;
+      font-size: 25px;
+      padding: 20px;
+    }
+  }
+
+  .totalPrice {
+    font-size: 24px;
+    font-weight: $font-weight-bold;
+    text-align: right;
+  }
+
+  .cardName {
+    font-weight: $font-weight-bold;
+    color: $font-color;
+  }
 }
-.sizeAndColorCont {
-  display: flex;
-  gap: 14px;
-  color: #5e5e5e;
+
+.totalCartPrice {
+  text-align: right;
+  color: $font-color;
+  font-size: 32px;
+  margin-bottom: 25px;
+  margin-top: 15px;
+  font-weight: $font-weight-bold;
 }
-.cartItemImage {
-  width: 223px;
-  height: 161px;
+
+.pay {
+  color: #ffffff;
+  width: 352px;
+  height: 65px;
+  padding: 24px 30px;
+  gap: 10px;
+  border: none;
+  border-radius: 2px;
+  background-color: $border-color;
+  margin-left: auto;
+  font-size: 24px;
+}
+
+.icon {
+  background-image: url("../../public/images/корзина.svg");
+  width: 16px;
+  height: 16px;
   background-position: center;
-  background-repeat: no-repeat;
   background-size: contain;
-}
-.delete {
-  margin-top: auto;
-}
-.priseAndCountCont {
-  margin-top: auto;
-}
-.biggerBtns {
 }
 </style>

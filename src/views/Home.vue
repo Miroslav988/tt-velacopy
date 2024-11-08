@@ -4,6 +4,7 @@ import MyHeader from "@/components/MyHeader.vue";
 import products from "@/data/lvl3Products.json";
 import brands from "@/data/brands.json";
 import FilterItems from "@/components/FilterItem.vue";
+import "bootstrap/dist/css/bootstrap.min.css";
 export default {
   components: {
     ItemCard,
@@ -34,38 +35,36 @@ export default {
   },
   methods: {
     addToCart(cartItem) {
-      this.cartItems.push(cartItem); // Добавляем товар в корзину
-      console.log(this.cartItems);
-      this.updateOrderTotal(cartItem.price * cartItem.quantity); // Обновляем общую стоимость
-      this.updateOrderCount(cartItem.quantity); // Обновляем количество товаров
-    },
-    toggleBrand(brandId) {
-      const index = this.selectedBrands.indexOf(brandId);
-      if (index === -1) {
-        this.selectedBrands.push(brandId); // Добавляем бренд, если он не выбран
+      const existingItem = this.cartItems.find(
+        (item) =>
+          item.title === cartItem.title &&
+          item.size === cartItem.size &&
+          item.color === cartItem.color
+      );
+
+      if (existingItem) {
+        existingItem.quantity += cartItem.quantity;
       } else {
-        this.selectedBrands.splice(index, 1); // Удаляем бренд, если он уже выбран
+        this.cartItems.push({ ...cartItem, quantity: cartItem.quantity });
       }
+      this.updateOrderTotal(cartItem.price * cartItem.quantity);
+      this.updateOrderCount(cartItem.quantity);
     },
     toggleMenu() {
-      this.isMenuOpen = !this.isMenuOpen; // Переключаем состояние меню
+      this.isMenuOpen = !this.isMenuOpen;
     },
     updateOrderTotal(price) {
       const numericPrice = parseFloat(price);
-      this.orderTotal += numericPrice; // Обновляем сумму заказа
+      this.orderTotal += numericPrice;
     },
     updateOrderCount(quantity) {
-      this.numberOfOrders += quantity; // Увеличиваем количество заказов
+      this.numberOfOrders += quantity;
     },
   },
 };
 </script>
 <template>
-  <MyHeader
-    :orderTotal="orderTotal"
-    :numberOfOrders="numberOfOrders"
-    :cartItems="cartItems"
-  />
+  <MyHeader :cartItems="cartItems" />
   <h1 class="title">Заголовок</h1>
   <div class="mainContainer">
     <div class="sorter">
@@ -77,50 +76,54 @@ export default {
         @update:selectedBrands="selectedBrands = $event"
       />
     </div>
-    <div class="itemList">
-      <ItemCard
-        v-for="item in filteredProducts"
-        :key="item.id"
-        :item="item"
-        :updateOrderTotal="updateOrderTotal"
-        :updateOrderCount="updateOrderCount"
-        @add-to-cart="addToCart"
-      />
+    <div class="itemList row g-3">
+      <div class="col-4" v-for="item in filteredProducts" :key="item.id">
+        <ItemCard
+          :key="item.id"
+          :item="item"
+          :updateOrderTotal="updateOrderTotal"
+          :updateOrderCount="updateOrderCount"
+          @add-to-cart="addToCart"
+        />
+      </div>
     </div>
   </div>
 </template>
 
-<style>
+<style lang="scss">
+$margin-bottom: 24px;
+$title-color: #5e5e5e;
+$title-font-size: 34px;
+$gap: 20px;
+$border-color: black;
+$border-radius: 10px;
+
 .title {
   margin: 0;
-  margin-left: 82px;
-  color: #5e5e5e;
-  font-size: 34px;
+  margin-bottom: $margin-bottom;
+  color: $title-color;
+  font-size: $title-font-size;
 }
 .mainContainer {
   display: flex;
-  gap: 20px;
-  margin: 24px 82px 0px 82px;
-}
-.itemList {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
-}
-.sorter {
-  position: sticky;
-  margin-top: 10px;
-  display: flex;
-  width: 304px;
-  flex-direction: column;
-  height: fit-content;
-  border: 1px solid black;
-  border-radius: 10px;
-}
-.filters {
-  margin: 0;
-  font-size: 16px;
-  padding: 20px;
-  border-bottom: 1px solid black;
+  gap: $gap;
+
+  .sorter {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    height: fit-content;
+    border: 1px solid $border-color;
+    border-radius: $border-radius;
+
+    .filters {
+      font-size: 16px;
+      width: 304px;
+      padding: 20px;
+      margin: 0;
+      font-size: 16px;
+      border-bottom: 1px solid $border-color;
+    }
+  }
 }
 </style>

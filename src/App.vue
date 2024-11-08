@@ -2,7 +2,6 @@
   <div id="app">
     <main>
       <router-view></router-view>
-      <!-- Здесь будет отображаться контент в зависимости от маршрута -->
     </main>
 
     <footer>
@@ -17,4 +16,20 @@ export default {
 };
 </script>
 
-<style></style>
+<style lang="scss">
+@font-face {
+  font-family: "Raleway";
+  src: url("../public/Raleway/Raleway-VariableFont_wght.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+body {
+  font-family: "Raleway", sans-serif;
+  margin: 0 82px !important;
+}
+footer {
+  text-align: center;
+  padding: 20px;
+}
+</style>

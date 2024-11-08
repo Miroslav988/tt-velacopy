@@ -1,18 +1,18 @@
-// src/router/index.js
 import { createRouter, createWebHistory } from "vue-router";
-import Home from "../views/Home.vue"; // Импортируйте компонент Home
-import Cart from "../views/Cart.vue"; // Импортируйте компонент Cart
+import Home from "../views/Home.vue";
+import Cart from "../views/Cart.vue";
 
 const routes = [
+  { path: "/", redirect: "/home" },
   {
-    path: "/",
+    path: "/home",
     name: "Home",
-    component: Home, // Установите Home как компонент для маршрута по умолчанию
+    component: Home,
   },
   {
     path: "/cart",
     name: "Cart",
-    component: Cart, // Добавьте маршрут для страницы корзины
+    component: Cart,
   },
 ];
 
