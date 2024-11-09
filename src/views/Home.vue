@@ -20,6 +20,7 @@ export default {
       orderTotal: 0,
       numberOfOrders: 0,
       cartItems: [],
+      windowWidth: window.innerWidth,
     };
   },
 
@@ -31,6 +32,9 @@ export default {
       return this.products.filter((product) =>
         this.selectedBrands.includes(product.brand)
       );
+    },
+    isMobile() {
+      return this.windowWidth <= 425; // Определяем, является ли экран мобильным
     },
   },
   methods: {
@@ -50,6 +54,9 @@ export default {
       this.updateOrderTotal(cartItem.price * cartItem.quantity);
       this.updateOrderCount(cartItem.quantity);
     },
+    updateWindowWidth() {
+      this.windowWidth = window.innerWidth;
+    },
     toggleMenu() {
       this.isMenuOpen = !this.isMenuOpen;
     },
@@ -60,6 +67,9 @@ export default {
     updateOrderCount(quantity) {
       this.numberOfOrders += quantity;
     },
+  },
+  mounted() {
+    window.addEventListener("resize", this.updateWindowWidth);
   },
 };
 </script>
@@ -77,7 +87,11 @@ export default {
       />
     </div>
     <div class="itemList row g-3">
-      <div class="col-4" v-for="item in filteredProducts" :key="item.id">
+      <div
+        :class="isMobile ? 'col-12' : 'col-4'"
+        v-for="item in filteredProducts"
+        :key="item.id"
+      >
         <ItemCard
           :key="item.id"
           :item="item"
@@ -111,6 +125,9 @@ $border-radius: 10px;
 .mainContainer {
   display: flex;
   gap: $gap;
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
   .sorter {
     margin-top: 10px;
     display: flex;
@@ -125,6 +142,12 @@ $border-radius: 10px;
       margin: 0;
       font-size: 16px;
       border-bottom: 1px solid $border-color;
+      @media (max-width: 1024px) {
+        width: 182px;
+      }
+      @media (max-width: 768px) {
+        width: 100%;
+      }
     }
   }
 }

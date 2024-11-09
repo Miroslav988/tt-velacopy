@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div>
     <main>
       <router-view></router-view>
     </main>
@@ -24,9 +24,13 @@ export default {
   font-style: normal;
 }
 
-body {
+#app {
   font-family: "Raleway", sans-serif;
-  margin: 0 82px !important;
+  margin: 0 82px;
+
+  @media (max-width: 1024px) {
+    margin: 0 41px;
+  }
 }
 footer {
   text-align: center;

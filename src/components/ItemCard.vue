@@ -188,6 +188,9 @@ $cart-size: 60px;
   margin-top: 10px;
   padding: 12px;
   height: 390px;
+  @media (max-width: 425px) {
+    margin-left: 14px;
+  }
 
   .itemImage {
     margin-top: 34px;
@@ -264,6 +267,11 @@ $cart-size: 60px;
   border: none;
   border-radius: 50%;
   background-color: #5e5e5e;
+
+  @media (max-width: 1024px) {
+    width: 50px;
+    height: 50px;
+  }
 
   &:disabled {
     background-color: $red;

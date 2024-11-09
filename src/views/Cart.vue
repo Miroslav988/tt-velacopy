@@ -116,6 +116,10 @@ $font-weight-bold: 900;
   border: 1px solid $border-color;
   display: flex;
   padding: $padding 36px 24px 18px;
+  @media (max-width: 425px) {
+    display: flex;
+    flex-direction: column;
+  }
 
   .sizeAndColorCont {
     display: flex;
@@ -151,6 +155,13 @@ $font-weight-bold: 900;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    @media (max-width: 425px) {
+      width: 144px;
+    }
+    @media (max-width: 320px) {
+      width: auto;
+      border: none;
+    }
 
     .minus,
     .plus {
@@ -166,6 +177,9 @@ $font-weight-bold: 900;
     font-size: 24px;
     font-weight: $font-weight-bold;
     text-align: right;
+    @media (max-width: 425px) {
+      text-align: center;
+    }
   }
 
   .cardName {
@@ -194,6 +208,11 @@ $font-weight-bold: 900;
   background-color: $border-color;
   margin-left: auto;
   font-size: 24px;
+  @media (max-width: 425px) {
+    margin-left: 0;
+    width: auto;
+    height: auto;
+  }
 }
 
 .icon {

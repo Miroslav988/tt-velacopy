@@ -99,6 +99,10 @@ $cart-text-color: #bbbbbb;
       border: none;
       border-radius: 50%;
       background-color: $cart-bg-color;
+      @media (max-width: 320px) {
+        width: 45px;
+        height: 45px;
+      }
 
       .cartName {
         color: $cart-text-color;
